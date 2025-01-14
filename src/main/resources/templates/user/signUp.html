@@ -8,7 +8,7 @@
     <section class="contents d-flex justify-content-center">
       <div class="w-50 my-4">
         <h1 class="mb-4">회원가입</h1>
-        <form method="post" action="">
+        <form id= "signUpForm" method="post" action="/user/sign-up">
           <table class="table table-bordered">
             <tr>
               <th>* 아이디 (4자이상)</th>
@@ -83,6 +83,56 @@
             }
             , error:function(e) {
               alert("중복확인에 실패했습니다.");
+            }
+          });
+        });
+
+        // 회원가입
+        $("#signUpForm").on("submit", function(e){
+
+          e.preventDefault();
+
+          let loginId  = $("input[name=userId]").val().trim();
+          let password  = $("input[name=password]").val().trim();
+          let passwordCheck = $("input[name=passwordCheck]").val().trim();
+          let name = $("input[name=name]").val().trim();
+          let email = $("input[name=email]").val().trim();
+
+          if(!loginId){
+            alert("아이디를 입력하세요.");
+            return false;
+          }
+
+          if(!password || !passwordCheck){
+            alert("아이디를 입력하세요.");
+            return false;
+          }
+
+          if(!name){
+            alert("이름을 입력하세요.");
+            return false;
+          }
+
+          if(!email){
+            alert("이메일을 입력하세요.");
+            return false;
+          }
+
+          let url = $(this).attr("action");
+          console.log(url);
+
+          let params = $(this).serialize(); // form 태그의 name속성을 request 파라미터로 구성
+
+          // $(this)[0].submit();
+          alert("회원가입");
+
+          $.post(url, params)
+          .done(function(data){
+            if(data.code == 200){
+              alert("가입을 환영합니다. 로그인을 해주세요.");
+              location.href = "/user/sign-in-view";
+            } else{
+              alert(data.error_message);
             }
           });
         });
