@@ -13,7 +13,8 @@ import java.nio.file.Paths;
 @Slf4j
 @Component
 public class FileManagerService {
-    public final static String FILE_UPLOAD_PATH = "D:\\aiden\\6_spring_project\\m_images/";
+//    public final static String FILE_UPLOAD_PATH = "D:\\aiden\\6_spring_project\\m_images/";
+    public final static String FILE_UPLOAD_PATH = "C:\\Users\\comet\\Desktop\\aiden\\images_memo/";
 
     public String uploadFile(MultipartFile file, int userId){
         // 폴더 (directory) - ex) aaaa_15559324/sun.png
