@@ -8,4 +8,75 @@
         FROM
             `post`
     </select>
+    <select id="selectPostList" parameterType="int" resultType="map">
+        SELECT
+        `id`
+        ,`userId`
+        ,`subject`
+        ,`content`
+        ,`imagePath`
+        ,`createdAt`
+        ,`updatedAt`
+        FROM
+        `post`
+        WHERE `userId` = #{userId}
+        ORDER BY `id` DESC
+    </select>
+    <select id="selectPostByUserIdAndPostId" parameterType="map" resultType="com.memo.post.domain.Post">
+        SELECT
+        `id`
+        ,`userId`
+        ,`subject`
+        ,`content`
+        ,`imagePath`
+        ,`createdAt`
+        ,`updatedAt`
+        FROM
+        `post`
+        WHERE `userId` = #{userId}
+        AND `id` = #{postId}
+        ORDER BY `id` DESC
+    </select>
+
+    <insert id="insertPost" parameterType="map">
+        INSERT INTO
+            `post`
+        (
+            `userId`
+            , `subject`
+            , `content`
+            , `imagePath`
+            , `createdAt`
+            , `updatedAt`
+        )
+        VALUES
+        (
+            #{userId}
+            , #{subject}
+            , #{content}
+            , #{imagePath}
+            , NOW()
+            , NOW()
+        )
+    </insert>
+    <update id="updatePostById" parameterType="map">
+        UPDATE `post`
+        SET
+            `subject` = #{subject},
+            `content` = #{content},
+            <if test="imagePath != null">
+            `imagePath` = #{imagePath},
+            </if>
+            `updatedAt` = NOW()
+        WHERE
+            `id` = #{postId}
+    </update>
+    <delete id="deletePostByUserIdAndPostId" parameterType="map">
+        DELETE FROM
+            `post`
+        WHERE
+            `id` = ${postId}
+        AND
+            `userId` = ${userId}
+    </delete>
 </mapper>
