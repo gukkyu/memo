@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +24,43 @@ public class PostBO {
     @Autowired
     private FileManagerService fileManager;
 
+    private final static int POST_MAX_SIZE = 3;
+
 //    private Logger log = LoggerFactory.getLogger(PostBO.class);
 //    private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public List<Post> getPostListByUserId(int userId){
-        return postMapper.selectPostList(userId);
+    public List<Post> getPostListByUserId(int userId, Integer prevId, Integer nextId){
+        // 4 3 2 / 1
+
+        Integer standardId = null;
+        String direction = null;
+
+        if (prevId != null){
+            standardId = prevId;
+            direction = "prev";
+
+            List<Post> postList = postMapper.selectPostList(userId, direction, standardId, POST_MAX_SIZE);
+
+            Collections.reverse(postList);
+
+            return postList;
+
+        } else if (nextId != null){
+            standardId = nextId;
+            direction = "next";
+        }
+
+        return postMapper.selectPostList(userId, direction, standardId, POST_MAX_SIZE);
+    }
+
+    public boolean isPrevLastPageByUserId(int userId, int prevId){
+        int maxPostId = postMapper.selectPostIdByUserIdAsSort(userId, "desc");
+        return maxPostId == prevId;
+    }
+
+    public boolean isNextLastPageByUserId(int userId, int nextId){
+        int minPostId = postMapper.selectPostIdByUserIdAsSort(userId, "asc");
+        return minPostId == nextId;
     }
 
     public Post getPostByUserIdAndPostId(int postId, int userId){
