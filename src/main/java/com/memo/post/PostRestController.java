@@ -55,6 +55,8 @@ public class PostRestController {
         return result;
     }
 
+    // 이슈를 올리기위한 주석
+
     @DeleteMapping("/delete")
     public Map<String,Object> delete(@RequestParam("postId") int postId, HttpSession session){
         int userId = (int) session.getAttribute("userId");
